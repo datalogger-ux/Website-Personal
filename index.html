@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var queryString = encodeURIComponent('SELECT A, B'); // Sesuaikan dengan kueri yang sesuai dengan data Anda
+        var query = new google.visualization.Query(
+            'https://docs.google.com/spreadsheets/d/1j1lQDYrgVHueNyPTC4yfX5BNTYiq9IyBMVDhDEwUQkY/gviz/tq?tq=' + queryString);
+        
+        query.send(handleQueryResponse);
+      }
+
+      function handleQueryResponse(response) {
+        if (response.isError()) {
+          console.error('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+          return;
+        }
+
+        var data = response.getDataTable();
+
+        var options = {
+          curveType: 'function',
+          legend: { position: 'bottom' },
+          vAxis: { 
+            title: 'Suhu Kontroler (°C)', // Judul sumbu y
+            titleTextStyle: { 
+              italic: false, // Tidak dalam format italic
+              bold: true // Judul tebal (bold)
+            }
+          }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+
+        // Tambahkan judul di tengah atas grafik
+        var titleText = 'SENSOR SUHU';
+        var chartTitleContainer = document.createElement('div');
+        chartTitleContainer.id = 'chart_title';
+        chartTitleContainer.innerHTML = titleText;
+        document.getElementById('curve_chart').appendChild(chartTitleContainer);
+      }
+
+      // Fungsi untuk merefresh halaman setiap 10 detik
+      function autoRefreshPage() {
+        window.location.reload();
+      }
+
+      // Panggil fungsi autoRefreshPage setiap 10 detik
+      setInterval(autoRefreshPage, 10000); // 10 detik = 10000 milidetik
+    </script>
+    <style>
+      #curve_chart {
+        width: 90vw; /* 90% dari lebar viewport */
+        height: 70vh; /* 70% dari tinggi viewport */
+        margin: 0 auto; /* Pusatkan secara horizontal */
+        position: relative;
+      }
+      #chart_title {
+        position: absolute;
+        top: 10px; /* Sesuaikan posisi vertikal sesuai kebutuhan */
+        left: 50%; /* Pusatkan secara horizontal */
+        transform: translateX(-50%);
+        text-align: center;
+        font-size: 3vw; /* Ukuran font responsif */
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="curve_chart"></div>
+  </body>
+</html>
+ 

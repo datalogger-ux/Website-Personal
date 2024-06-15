@@ -1,0 +1,32 @@
+.temperature-graph {
+	width: 100px;
+	margin: 0 auto;
+}
+
+.bar {
+	width: 30px;
+	background-color: blue;
+	margin-bottom: 5px;
+}
+
+.bar:nth-child(even) {
+	background-color: lightblue;
+}
+
+.bar:before {
+	content: '';
+	display: block;
+	height: 100%;
+	width: 10px;
+	background-color: white;
+	float: left;
+}
+
+.bar:after {
+	content: attr(style);
+	display: block;
+	text-align: center;
+	margin-top: -20px;
+	color: white;
+	font-size: 12px;
+}
